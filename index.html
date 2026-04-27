@@ -125,6 +125,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
 
   <!-- FASE 2: Juego -->
   <div id="fase-juego" class="hidden">
+    <div class="desc-box visible" id="desc-box-juego"></div>
     <div class="card">
       <div class="progress" id="prog"></div>
       <div id="contenido"></div>
@@ -233,6 +234,8 @@ function iniciar(){
   paso=0;aciertos=0;
   document.getElementById('fase-escenario').classList.add('hidden');
   document.getElementById('fase-juego').classList.remove('hidden');
+  var descJuego = document.getElementById('desc-box-juego');
+  descJuego.innerHTML = '<strong>Escenario — ' + S[sel].titulo + ':</strong> ' + S[sel].desc;
   renderPaso();
 }
 
