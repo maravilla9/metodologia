@@ -258,7 +258,7 @@ function renderPaso(){
     p.verbos.forEach(function(v){h+='<button class="chip" onclick="selVerb(\''+v+'\',this)">'+v+'</button>';});
     h+='</div>';
   }
-  h+='<div id="fb" class="fb"></div><div class="btn-row" style="margin-top:.5rem"><button class="btn primary" onclick="verificar()">Verificar respuesta</button><button class="btn hidden" id="btn-reiniciar-paso" onclick="reiniciarPaso()">↺ Reintentar este paso</button></div>';
+  h+='<div id="fb" class="fb"></div><div class="btn-row" style="margin-top:.5rem"><button class="btn primary" onclick="verificar()">Verificar respuesta</button><button class="btn" id="btn-reiniciar-paso" onclick="reiniciarPaso()" style="display:none">↺ Reintentar este paso</button></div>';
   document.getElementById('contenido').innerHTML=h;
 }
 
@@ -295,7 +295,7 @@ function verificar(){
   fb.textContent=correcto?p.fok:p.fmal;
   if(correcto)aciertos++;
   var btnR=document.getElementById('btn-reiniciar-paso');
-  if(btnR)btnR.classList.toggle('hidden',correcto);
+  if(btnR)btnR.style.display=correcto?'none':'inline-block';
   setTimeout(function(){
     if(correcto){
       paso++;
