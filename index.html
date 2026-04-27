@@ -70,7 +70,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
 .prow{margin-bottom:12px}
 .plbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
 .pval{font-size:13px;color:var(--text);background:var(--gris);border-radius:8px;padding:10px 12px;line-height:1.6}
-.share-area{background:var(--azul-claro);border-radius:12px;padding:1rem;margin-top:1rem;text-align:center}
+.retro-card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem;border-left:4px solid var(--azul)}
+.retro-title{font-size:11px;font-weight:600;color:var(--azul);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+#retro-msg{font-size:13px;color:var(--text);line-height:1.7}background:var(--azul-claro);border-radius:12px;padding:1rem;margin-top:1rem;text-align:center}
 .share-area p{font-size:13px;color:var(--azul);margin-bottom:10px;font-weight:500}
 .share-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .share-btn{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;color:#fff;font-family:'DM Sans',sans-serif}
@@ -103,7 +105,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
       <p>Metodología de la Investigación — Universidad de las Américas y el Caribe</p>
     </div>
   </div>
- 
+
   <!-- FASE 1: Elegir escenario -->
   <div id="fase-escenario">
     <div class="card">
@@ -119,7 +121,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
       <div class="btn-row"><button class="btn primary hidden" id="btn-ini" onclick="iniciar()">Comenzar ➜</button></div>
     </div>
   </div>
- 
+
   <!-- FASE 2: Juego -->
   <div id="fase-juego" class="hidden">
     <div class="card">
@@ -127,12 +129,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
       <div id="contenido"></div>
     </div>
   </div>
- 
+
   <!-- FASE 3: Resultado -->
   <div id="fase-resultado" class="hidden">
     <div class="proto-card">
       <h2>Tu protocolo de investigación <span class="score-badge" id="score-badge"></span></h2>
       <div id="proto-body"></div>
+    </div>
+    <div class="retro-card" id="retro-card">
+      <p class="retro-title">Retroalimentación</p>
+      <p id="retro-msg"></p>
     </div>
     <div class="share-area">
       <p>¡Comparte tu resultado con tus compañeros!</p>
@@ -145,7 +151,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
     <div style="margin-top:1rem"><button class="btn primary" onclick="reiniciar()">Intentar con otro escenario</button></div>
   </div>
 </div>
- 
+
 <script>
 var S=[
   {titulo:"Gestión organizacional",
@@ -209,9 +215,9 @@ var S=[
      ok:1,fok:"✓ Excelente. Clara, específica y con una relación verificable entre variables.",fmal:"✗ Una hipótesis debe proponer una relación específica y verificable."}
    ]}
 ];
- 
+
 var sel=-1,paso=0,respOpt=-1,respVerb='',aciertos=0;
- 
+
 function elegir(i){
   sel=i;
   document.querySelectorAll('.sc-card').forEach(function(c,j){c.classList.toggle('active',j===i)});
@@ -219,14 +225,14 @@ function elegir(i){
   d.textContent=S[i].desc;d.classList.add('visible');
   var b=document.getElementById('btn-ini');b.classList.remove('hidden');
 }
- 
+
 function iniciar(){
   paso=0;aciertos=0;
   document.getElementById('fase-escenario').classList.add('hidden');
   document.getElementById('fase-juego').classList.remove('hidden');
   renderPaso();
 }
- 
+
 function renderProg(){
   var p=document.getElementById('prog');p.innerHTML='';
   var total=S[sel].pasos.length;
@@ -237,7 +243,7 @@ function renderProg(){
     if(i<total-1){var l=document.createElement('div');l.className='prog-line'+(i<paso?' done':'');p.appendChild(l);}
   });
 }
- 
+
 function renderPaso(){
   renderProg();respOpt=-1;respVerb='';
   var p=S[sel].pasos[paso];
@@ -252,23 +258,23 @@ function renderPaso(){
     p.verbos.forEach(function(v){h+='<button class="chip" onclick="selVerb(\''+v+'\',this)">'+v+'</button>';});
     h+='</div>';
   }
-  h+='<div id="fb" class="fb"></div><div class="btn-row" style="margin-top:.5rem"><button class="btn primary" onclick="verificar()">Verificar respuesta</button></div>';
+  h+='<div id="fb" class="fb"></div><div class="btn-row" style="margin-top:.5rem"><button class="btn primary" onclick="verificar()">Verificar respuesta</button><button class="btn hidden" id="btn-reiniciar-paso" onclick="reiniciarPaso()">↺ Reintentar este paso</button></div>';
   document.getElementById('contenido').innerHTML=h;
 }
- 
+
 function selOpt(i,el){
   respOpt=i;
   document.querySelectorAll('.opt').forEach(function(o){o.classList.remove('sel')});
   el.classList.add('sel');
 }
- 
+
 function selVerb(v,el){
   respVerb=v;
   document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('sel')});
   el.classList.add('sel');
   var b=document.getElementById('vblank');if(b)b.textContent=v;
 }
- 
+
 function verificar(){
   var p=S[sel].pasos[paso];
   var fb=document.getElementById('fb');
@@ -288,13 +294,17 @@ function verificar(){
   fb.className='fb '+(correcto?'ok':'bad');
   fb.textContent=correcto?p.fok:p.fmal;
   if(correcto)aciertos++;
+  var btnR=document.getElementById('btn-reiniciar-paso');
+  if(btnR)btnR.classList.toggle('hidden',correcto);
   setTimeout(function(){
-    paso++;
-    if(paso>=S[sel].pasos.length)mostrarResultado();
-    else renderPaso();
-  },correcto?1800:2500);
+    if(correcto){
+      paso++;
+      if(paso>=S[sel].pasos.length)mostrarResultado();
+      else renderPaso();
+    }
+  },1800);
 }
- 
+
 function mostrarResultado(){
   document.getElementById('fase-juego').classList.add('hidden');
   document.getElementById('fase-resultado').classList.remove('hidden');
@@ -302,20 +312,35 @@ function mostrarResultado(){
   var ps=S[sel].pasos;
   var body='';
   ps.forEach(function(p,i){
-    var val=p.tipo==='verb'?p.ok:p.opts[p.ok];
+    var val=p.tipo==='verb'?p.tmpl.replace('_V_',p.ok):p.opts[p.ok];
     body+='<div class="prow"><div class="plbl">'+labels[i]+'</div><div class="pval">'+val+'</div></div>';
   });
   document.getElementById('proto-body').innerHTML=body;
   document.getElementById('score-badge').textContent=aciertos+'/'+ps.length+' aciertos';
+
+  var total=ps.length;
+  var retro='';
+  if(aciertos===total){
+    retro='¡Felicidades! Completaste el protocolo sin errores. Eso demuestra que comprendes los elementos fundamentales de la investigación científica. ¡Estás listo para aplicar esto en tu proyecto doctoral!';
+  } else if(aciertos>=3){
+    retro='¡Muy bien! Tuviste '+aciertos+' de '+total+' respuestas correctas. Estás en buen camino, solo necesitas repasar algunos conceptos. Te recomendamos releer la guía instruccional de la actividad correspondiente y volver a intentarlo para afianzar tu aprendizaje.';
+  } else {
+    retro='Obtuviste '+aciertos+' de '+total+' respuestas correctas. No te preocupes, los errores son parte del aprendizaje. Te recomendamos revisar los conceptos de planteamiento del problema, pregunta de investigación y enfoques metodológicos en tu bibliografía base, y volver a intentar el juego desde el inicio con otro escenario.';
+  }
+  document.getElementById('retro-msg').textContent=retro;
 }
- 
+
 function compartir(tipo){
   var txt='¡Completé el juego de Metodología de la Investigación - UNAC! Construí mi protocolo sobre: '+S[sel].titulo+' con '+aciertos+'/'+S[sel].pasos.length+' aciertos. ¿Tú ya lo intentaste? 👉 https://maravilla9.github.io/metodologia';
   if(tipo==='wa')window.open('https://wa.me/?text='+encodeURIComponent(txt));
   else if(tipo==='fb')window.open('https://www.facebook.com/sharer/sharer.php?u=https://maravilla9.github.io/metodologia&quote='+encodeURIComponent(txt));
   else if(tipo==='cp'){navigator.clipboard.writeText(txt).then(function(){alert('¡Enlace copiado!')});}
 }
- 
+
+function reiniciarPaso(){
+  renderPaso();
+}
+
 function reiniciar(){
   sel=-1;paso=0;respOpt=-1;respVerb='';aciertos=0;
   document.getElementById('fase-resultado').classList.add('hidden');
