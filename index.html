@@ -74,8 +74,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
 .retro-title{font-size:11px;font-weight:600;color:var(--azul);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
 #retro-msg{font-size:13px;color:var(--text);line-height:1.7}background:var(--azul-claro);border-radius:12px;padding:1rem;margin-top:1rem;text-align:center}
 .share-area p{font-size:13px;color:var(--azul);margin-bottom:10px;font-weight:500}
-.share-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.share-btn{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;color:#fff;font-family:'DM Sans',sans-serif}
+.share-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center}
+.share-btn{padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;color:#fff;font-family:'DM Sans',sans-serif;min-width:120px;text-align:center}
 .share-btn.wa{background:#25D366}
 .share-btn.fb{background:#1877F2}
 .share-btn.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
@@ -148,7 +148,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
         <button class="share-btn cp" onclick="compartir('cp')">Copiar enlace</button>
       </div>
     </div>
-    <div style="margin-top:1rem"><button class="btn primary" onclick="reiniciar()">Intentar con otro escenario</button></div>
+    <div style="margin-top:1rem;display:flex;justify-content:center"><button class="btn primary" onclick="reiniciar()">Intentar con otro escenario</button></div>
   </div>
 </div>
 
