@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construye tu Protocolo de Investigación — UNAC</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#1F3864;
+  --azul2:#2E75B6;
+  --azul-claro:#E6F1FB;
+  --verde:#3B6D11;
+  --verde-claro:#EAF3DE;
+  --rojo:#A32D2D;
+  --rojo-claro:#FCEBEB;
+  --gris:#f5f5f3;
+  --border:#ddd;
+  --text:#1a1a1a;
+  --muted:#666;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);min-height:100vh}
+.container{max-width:680px;margin:0 auto;padding:1.5rem 1rem}
+.header{background:var(--azul);border-radius:16px;padding:1.5rem;display:flex;align-items:center;gap:16px;margin-bottom:1.5rem}
+.header svg{width:52px;height:52px;flex-shrink:0}
+.header-text h1{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;margin-bottom:2px}
+.header-text p{font-size:12px;color:rgba(255,255,255,0.7)}
+.card{background:#fff;border-radius:16px;padding:1.25rem;border:1px solid var(--border);margin-bottom:1rem}
+.step-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.step-ttl{font-size:17px;font-weight:600;color:var(--text);margin-bottom:6px}
+.step-hint{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1.25rem}
+.scenario-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1rem}
+.sc-card{border:1.5px solid var(--border);border-radius:12px;padding:1rem;cursor:pointer;background:#fff;transition:all 0.2s;text-align:center}
+.sc-card:hover{border-color:var(--azul2);background:var(--azul-claro)}
+.sc-card.active{border-color:var(--azul);background:var(--azul-claro)}
+.sc-card .ico{font-size:28px;margin-bottom:8px}
+.sc-card h3{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.sc-card p{font-size:11px;color:var(--muted);line-height:1.4}
+.desc-box{background:var(--azul-claro);border-left:4px solid var(--azul);border-radius:0 12px 12px 0;padding:14px;font-size:13px;line-height:1.7;margin-bottom:1.25rem;display:none}
+.desc-box.visible{display:block}
+.progress{display:flex;gap:8px;margin-bottom:1.5rem;align-items:center}
+.dot{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted);background:#fff;transition:all 0.3s;flex-shrink:0}
+.dot.done{background:var(--azul);color:#fff;border-color:var(--azul)}
+.dot.now{border-color:var(--azul);color:var(--azul)}
+.prog-line{flex:1;height:2px;background:var(--border);border-radius:2px}
+.prog-line.done{background:var(--azul)}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem}
+.opt{border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:13px;color:var(--text);background:#fff;text-align:left;line-height:1.5;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.opt:hover{border-color:var(--azul2);background:var(--azul-claro)}
+.opt.sel{border-color:var(--azul);background:var(--azul-claro);color:var(--azul)}
+.opt.ok{border-color:var(--verde);background:var(--verde-claro);color:var(--verde)}
+.opt.bad{border-color:var(--rojo);background:var(--rojo-claro);color:var(--rojo)}
+.verb-area{background:var(--gris);border-radius:10px;padding:14px;margin-bottom:1rem;font-size:14px;line-height:2}
+.blank{display:inline-block;min-width:100px;border-bottom:2px solid var(--azul);text-align:center;color:var(--azul);font-weight:600;margin:0 4px;padding:0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.chip{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text);transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.chip:hover{border-color:var(--azul2);background:var(--azul-claro)}
+.chip.sel{background:var(--azul);color:#fff;border-color:var(--azul)}
+.fb{font-size:13px;padding:12px 16px;border-radius:10px;margin-bottom:1rem;line-height:1.6;display:none}
+.fb.ok{background:var(--verde-claro);color:var(--verde);display:block}
+.fb.bad{background:var(--rojo-claro);color:var(--rojo);display:block}
+.btn{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn:hover{background:var(--gris)}
+.btn.primary{background:var(--azul);color:#fff;border-color:var(--azul)}
+.btn.primary:hover{background:var(--azul2)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.proto-card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem}
+.proto-card h2{font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:1.25rem;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.prow{margin-bottom:12px}
+.plbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.pval{font-size:13px;color:var(--text);background:var(--gris);border-radius:8px;padding:10px 12px;line-height:1.6}
+.share-area{background:var(--azul-claro);border-radius:12px;padding:1rem;margin-top:1rem;text-align:center}
+.share-area p{font-size:13px;color:var(--azul);margin-bottom:10px;font-weight:500}
+.share-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.share-btn{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;color:#fff;font-family:'DM Sans',sans-serif}
+.share-btn.wa{background:#25D366}
+.share-btn.fb{background:#1877F2}
+.share-btn.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.share-btn.cp{background:var(--azul)}
+.score-badge{display:inline-block;background:var(--azul);color:#fff;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600;margin-left:8px}
+.hidden{display:none}
+@media(max-width:480px){
+  .scenario-grid{grid-template-columns:1fr}
+  .share-btns{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60 5 L110 25 L110 80 Q110 120 60 138 Q10 120 10 80 L10 25 Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+      <text x="60" y="50" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="24" fill="white">UNAC</text>
+      <ellipse cx="60" cy="90" rx="32" ry="30" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+      <line x1="28" y1="90" x2="92" y2="90" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+      <line x1="60" y1="60" x2="60" y2="120" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+      <path d="M32 74 Q60 62 88 74" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+      <path d="M32 106 Q60 118 88 106" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+    </svg>
+    <div class="header-text">
+      <h1>Construye tu protocolo de investigación</h1>
+      <p>Metodología de la Investigación — Universidad de las Américas y el Caribe</p>
+    </div>
+  </div>
+ 
+  <!-- FASE 1: Elegir escenario -->
+  <div id="fase-escenario">
+    <div class="card">
+      <p class="step-lbl">Primero</p>
+      <p class="step-ttl">Elige tu escenario</p>
+      <p class="step-hint">Selecciona el área que más se acerque a tu tema de investigación doctoral.</p>
+      <div class="scenario-grid">
+        <div class="sc-card" onclick="elegir(0)"><div class="ico">🏢</div><h3>Gestión organizacional</h3><p>Alta rotación de personal en una empresa</p></div>
+        <div class="sc-card" onclick="elegir(1)"><div class="ico">🎓</div><h3>Educación</h3><p>Deserción escolar en nivel superior</p></div>
+        <div class="sc-card" onclick="elegir(2)"><div class="ico">🏥</div><h3>Salud pública</h3><p>Sedentarismo en adultos mayores</p></div>
+      </div>
+      <div class="desc-box" id="desc-box"></div>
+      <div class="btn-row"><button class="btn primary hidden" id="btn-ini" onclick="iniciar()">Comenzar ➜</button></div>
+    </div>
+  </div>
+ 
+  <!-- FASE 2: Juego -->
+  <div id="fase-juego" class="hidden">
+    <div class="card">
+      <div class="progress" id="prog"></div>
+      <div id="contenido"></div>
+    </div>
+  </div>
+ 
+  <!-- FASE 3: Resultado -->
+  <div id="fase-resultado" class="hidden">
+    <div class="proto-card">
+      <h2>Tu protocolo de investigación <span class="score-badge" id="score-badge"></span></h2>
+      <div id="proto-body"></div>
+    </div>
+    <div class="share-area">
+      <p>¡Comparte tu resultado con tus compañeros!</p>
+      <div class="share-btns">
+        <button class="share-btn wa" onclick="compartir('wa')">WhatsApp</button>
+        <button class="share-btn fb" onclick="compartir('fb')">Facebook</button>
+        <button class="share-btn cp" onclick="compartir('cp')">Copiar enlace</button>
+      </div>
+    </div>
+    <div style="margin-top:1rem"><button class="btn primary" onclick="reiniciar()">Intentar con otro escenario</button></div>
+  </div>
+</div>
+ 
+<script>
+var S=[
+  {titulo:"Gestión organizacional",
+   desc:"Una empresa mediana del sector servicios en México ha registrado que el 40% de sus empleados renuncia antes de cumplir un año. La dirección general desconoce las causas reales de esta situación y necesita información para tomar decisiones.",
+   pasos:[
+    {tipo:"opt",lbl:"Paso 1 de 5",ttl:"Identifica el problema de investigación",hint:"Lee el escenario y selecciona cuál es el problema central que se debe investigar.",
+     opts:["Los empleados no reciben suficiente salario.","La alta rotación de personal y sus causas en la organización.","La empresa no tiene departamento de recursos humanos.","El gerente no sabe administrar a su equipo."],
+     ok:1,fok:"✓ Correcto. El problema central es la alta rotación y la necesidad de comprender sus causas.",fmal:"✗ El problema debe ser amplio y enfocado en el fenómeno, no en una causa específica."},
+    {tipo:"opt",lbl:"Paso 2 de 5",ttl:"Formula la pregunta de investigación",hint:"Selecciona la pregunta que mejor expresa el problema de forma clara, específica y viable.",
+     opts:["¿Por qué los empleados son flojos?","¿Cuáles son los factores organizacionales que influyen en la rotación de personal en empresas medianas del sector servicios en México?","¿Cómo se puede ganar más dinero en la empresa?","¿Qué hace el gerente cuando se va un empleado?"],
+     ok:1,fok:"✓ Excelente. La pregunta es clara, delimitada y apunta directamente al fenómeno.",fmal:"✗ Recuerda que la pregunta debe ser específica, académica y responder al problema planteado."},
+    {tipo:"verb",lbl:"Paso 3 de 5",ttl:"Construye el objetivo general",hint:"Selecciona el verbo en infinitivo más adecuado para iniciar el objetivo general.",
+     tmpl:"_V_ los factores organizacionales que influyen en la alta rotación de personal en empresas medianas del sector servicios en México.",
+     verbos:["Analizar","Comprar","Ignorar","Suponer","Evaluar"],ok:"Analizar",
+     fok:"✓ Correcto. 'Analizar' es un verbo preciso para un objetivo que busca comprender causas y factores.",fmal:"✗ El verbo debe ser en infinitivo, medible y coherente con la pregunta de investigación."},
+    {tipo:"opt",lbl:"Paso 4 de 5",ttl:"Elige el enfoque de investigación",hint:"Considerando que queremos entender las causas y experiencias detrás de la rotación, ¿qué enfoque es el más adecuado?",
+     opts:["Cuantitativo, porque solo nos interesan los números de rotación.","Cualitativo, porque queremos comprender las experiencias de los empleados.","Mixto, porque podemos medir la rotación y explorar las razones de los empleados.","No se necesita enfoque, solo sentido común."],
+     ok:2,fok:"✓ Muy bien. El enfoque mixto permite medir el fenómeno y explorar sus causas en profundidad.",fmal:"✗ Piensa en qué tipo de datos necesitas para responder la pregunta."},
+    {tipo:"opt",lbl:"Paso 5 de 5",ttl:"Plantea la hipótesis",hint:"Selecciona la hipótesis que mejor se relaciona con el problema.",
+     opts:["Los empleados renuncian porque quieren más vacaciones.","El clima organizacional, el liderazgo y las oportunidades de desarrollo influyen significativamente en la rotación de personal.","La empresa debería pagar más a sus trabajadores.","La rotación no tiene causas identificables."],
+     ok:1,fok:"✓ Excelente hipótesis. Específica, medible y coherente con el problema.",fmal:"✗ Una hipótesis debe ser una proposición provisional, específica y verificable."}
+   ]},
+  {titulo:"Educación",
+   desc:"Una universidad pública reporta que el 35% de sus estudiantes abandona la carrera antes de tercer semestre. Las autoridades académicas desconocen si este fenómeno se debe a factores económicos, académicos o personales.",
+   pasos:[
+    {tipo:"opt",lbl:"Paso 1 de 5",ttl:"Identifica el problema de investigación",hint:"Selecciona cuál es el problema central que se debe investigar.",
+     opts:["Los estudiantes no estudian lo suficiente.","Los profesores son muy exigentes.","La deserción estudiantil en nivel superior y los factores que la determinan.","La universidad no tiene suficientes computadoras."],
+     ok:2,fok:"✓ Correcto. El problema es la deserción como fenómeno que necesita ser comprendido.",fmal:"✗ El problema debe centrarse en el fenómeno principal, no en una causa específica."},
+    {tipo:"opt",lbl:"Paso 2 de 5",ttl:"Formula la pregunta de investigación",hint:"Selecciona la pregunta más adecuada.",
+     opts:["¿Por qué los estudiantes son irresponsables?","¿Cuáles son los factores académicos, económicos y personales que inciden en la deserción estudiantil en nivel superior?","¿Cómo se puede obligar a los estudiantes a quedarse?","¿Cuánto cuesta reponer a un estudiante que abandona?"],
+     ok:1,fok:"✓ Excelente. La pregunta es clara, multidimensional y académicamente válida.",fmal:"✗ La pregunta debe ser específica, neutral y orientada al fenómeno."},
+    {tipo:"verb",lbl:"Paso 3 de 5",ttl:"Construye el objetivo general",hint:"Selecciona el verbo más adecuado.",
+     tmpl:"_V_ los factores académicos, económicos y personales que inciden en la deserción estudiantil en nivel superior.",
+     verbos:["Identificar","Ignorar","Vender","Suponer","Copiar"],ok:"Identificar",
+     fok:"✓ Correcto. 'Identificar' es preciso para reconocer y nombrar factores.",fmal:"✗ El verbo debe ser en infinitivo, medible y coherente con la pregunta."},
+    {tipo:"opt",lbl:"Paso 4 de 5",ttl:"Elige el enfoque de investigación",hint:"¿Qué enfoque es más pertinente para estudiar la deserción?",
+     opts:["Cuantitativo, para medir tasas y correlaciones estadísticas.","Cualitativo, para explorar experiencias de estudiantes que abandonaron.","Mixto, para medir el fenómeno y comprender las experiencias.","No se necesita ningún enfoque."],
+     ok:2,fok:"✓ Muy bien. El mixto permite datos estadísticos y comprender las historias detrás.",fmal:"✗ Considera qué información necesitas para responder la pregunta."},
+    {tipo:"opt",lbl:"Paso 5 de 5",ttl:"Plantea la hipótesis",hint:"Selecciona la hipótesis más adecuada.",
+     opts:["Los estudiantes desertan porque no les gusta estudiar.","Los factores económicos, la falta de orientación vocacional y el bajo rendimiento son las principales causas de deserción.","La deserción es culpa de los profesores.","No existe relación entre factores personales y deserción."],
+     ok:1,fok:"✓ Excelente. Hipótesis específica, multifactorial y verificable.",fmal:"✗ Una hipótesis debe proponer una respuesta provisional y verificable."}
+   ]},
+  {titulo:"Salud pública",
+   desc:"Un centro de salud en Morelia reporta que el 60% de los adultos mayores tiene un estilo de vida sedentario. Los médicos sospechan relación con enfermedades crónicas, pero no tienen datos que lo confirmen.",
+   pasos:[
+    {tipo:"opt",lbl:"Paso 1 de 5",ttl:"Identifica el problema de investigación",hint:"Selecciona el problema central.",
+     opts:["Los adultos mayores no quieren hacer ejercicio.","El sedentarismo en adultos mayores y su relación con las enfermedades crónicas.","El centro de salud no tiene suficiente personal.","Los medicamentos son muy caros."],
+     ok:1,fok:"✓ Correcto. El problema es el sedentarismo y su posible relación con enfermedades crónicas.",fmal:"✗ El problema debe centrarse en el fenómeno principal."},
+    {tipo:"opt",lbl:"Paso 2 de 5",ttl:"Formula la pregunta de investigación",hint:"Selecciona la pregunta más adecuada.",
+     opts:["¿Por qué los viejos no hacen ejercicio?","¿Cuál es la relación entre el sedentarismo y la prevalencia de enfermedades crónicas en adultos mayores en centros de salud de Morelia?","¿Cuánto cuesta atender a un paciente sedentario?","¿Cómo se puede obligar a los adultos mayores a moverse?"],
+     ok:1,fok:"✓ Muy bien. Pregunta específica, delimitada geográficamente y válida.",fmal:"✗ La pregunta debe ser precisa, neutral y orientada al fenómeno."},
+    {tipo:"verb",lbl:"Paso 3 de 5",ttl:"Construye el objetivo general",hint:"Selecciona el verbo más adecuado.",
+     tmpl:"_V_ la relación entre el sedentarismo y la prevalencia de enfermedades crónicas en adultos mayores en centros de salud de Morelia.",
+     verbos:["Determinar","Inventar","Ignorar","Suponer","Vender"],ok:"Determinar",
+     fok:"✓ Correcto. 'Determinar' es preciso para establecer una relación entre variables.",fmal:"✗ El verbo debe ser en infinitivo, medible y coherente con la pregunta."},
+    {tipo:"opt",lbl:"Paso 4 de 5",ttl:"Elige el enfoque de investigación",hint:"¿Qué enfoque es más adecuado?",
+     opts:["Cuantitativo, para medir la correlación entre sedentarismo y enfermedades con datos estadísticos.","Cualitativo, porque solo nos interesan las historias de los pacientes.","Mixto, aunque el cuantitativo es más adecuado por la naturaleza del problema.","No se necesita ningún enfoque."],
+     ok:0,fok:"✓ Excelente. El cuantitativo permite medir y correlacionar variables de salud con rigor estadístico.",fmal:"✗ Considera qué tipo de datos necesitas para responder la pregunta."},
+    {tipo:"opt",lbl:"Paso 5 de 5",ttl:"Plantea la hipótesis",hint:"Selecciona la hipótesis más adecuada.",
+     opts:["Los adultos mayores sedentarios tienen peor salud porque no se cuidan.","Existe una relación positiva y significativa entre el sedentarismo y la prevalencia de enfermedades crónicas en adultos mayores.","El sedentarismo no tiene relación con las enfermedades.","Los médicos deberían recetar más medicamentos."],
+     ok:1,fok:"✓ Excelente. Clara, específica y con una relación verificable entre variables.",fmal:"✗ Una hipótesis debe proponer una relación específica y verificable."}
+   ]}
+];
+ 
+var sel=-1,paso=0,respOpt=-1,respVerb='',aciertos=0;
+ 
+function elegir(i){
+  sel=i;
+  document.querySelectorAll('.sc-card').forEach(function(c,j){c.classList.toggle('active',j===i)});
+  var d=document.getElementById('desc-box');
+  d.textContent=S[i].desc;d.classList.add('visible');
+  var b=document.getElementById('btn-ini');b.classList.remove('hidden');
+}
+ 
+function iniciar(){
+  paso=0;aciertos=0;
+  document.getElementById('fase-escenario').classList.add('hidden');
+  document.getElementById('fase-juego').classList.remove('hidden');
+  renderPaso();
+}
+ 
+function renderProg(){
+  var p=document.getElementById('prog');p.innerHTML='';
+  var total=S[sel].pasos.length;
+  S[sel].pasos.forEach(function(s,i){
+    var d=document.createElement('div');
+    d.className='dot'+(i<paso?' done':i===paso?' now':'');
+    d.textContent=i+1;p.appendChild(d);
+    if(i<total-1){var l=document.createElement('div');l.className='prog-line'+(i<paso?' done':'');p.appendChild(l);}
+  });
+}
+ 
+function renderPaso(){
+  renderProg();respOpt=-1;respVerb='';
+  var p=S[sel].pasos[paso];
+  var h='<p class="step-lbl">'+p.lbl+'</p><p class="step-ttl">'+p.ttl+'</p><p class="step-hint">'+p.hint+'</p>';
+  if(p.tipo==='opt'){
+    h+='<div class="opts">';
+    p.opts.forEach(function(o,i){h+='<button class="opt" onclick="selOpt('+i+',this)">'+o+'</button>';});
+    h+='</div>';
+  } else {
+    var tmpl=p.tmpl.replace('_V_','<span class="blank" id="vblank">___</span>');
+    h+='<div class="verb-area"><p>'+tmpl+'</p></div><div class="chips">';
+    p.verbos.forEach(function(v){h+='<button class="chip" onclick="selVerb(\''+v+'\',this)">'+v+'</button>';});
+    h+='</div>';
+  }
+  h+='<div id="fb" class="fb"></div><div class="btn-row" style="margin-top:.5rem"><button class="btn primary" onclick="verificar()">Verificar respuesta</button></div>';
+  document.getElementById('contenido').innerHTML=h;
+}
+ 
+function selOpt(i,el){
+  respOpt=i;
+  document.querySelectorAll('.opt').forEach(function(o){o.classList.remove('sel')});
+  el.classList.add('sel');
+}
+ 
+function selVerb(v,el){
+  respVerb=v;
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('sel')});
+  el.classList.add('sel');
+  var b=document.getElementById('vblank');if(b)b.textContent=v;
+}
+ 
+function verificar(){
+  var p=S[sel].pasos[paso];
+  var fb=document.getElementById('fb');
+  var correcto=false;
+  if(p.tipo==='opt'){
+    if(respOpt===-1){fb.className='fb bad';fb.textContent='Selecciona una opción para continuar.';return;}
+    correcto=respOpt===p.ok;
+    document.querySelectorAll('.opt').forEach(function(o,i){
+      o.classList.remove('sel');
+      if(i===p.ok)o.classList.add('ok');
+      else if(i===respOpt&&!correcto)o.classList.add('bad');
+    });
+  } else {
+    if(!respVerb){fb.className='fb bad';fb.textContent='Selecciona un verbo para continuar.';return;}
+    correcto=respVerb===p.ok;
+  }
+  fb.className='fb '+(correcto?'ok':'bad');
+  fb.textContent=correcto?p.fok:p.fmal;
+  if(correcto)aciertos++;
+  setTimeout(function(){
+    paso++;
+    if(paso>=S[sel].pasos.length)mostrarResultado();
+    else renderPaso();
+  },correcto?1800:2500);
+}
+ 
+function mostrarResultado(){
+  document.getElementById('fase-juego').classList.add('hidden');
+  document.getElementById('fase-resultado').classList.remove('hidden');
+  var labels=['Problema de investigación','Pregunta de investigación','Objetivo general','Enfoque de investigación','Hipótesis'];
+  var ps=S[sel].pasos;
+  var body='';
+  ps.forEach(function(p,i){
+    var val=p.tipo==='verb'?p.ok:p.opts[p.ok];
+    body+='<div class="prow"><div class="plbl">'+labels[i]+'</div><div class="pval">'+val+'</div></div>';
+  });
+  document.getElementById('proto-body').innerHTML=body;
+  document.getElementById('score-badge').textContent=aciertos+'/'+ps.length+' aciertos';
+}
+ 
+function compartir(tipo){
+  var txt='¡Completé el juego de Metodología de la Investigación - UNAC! Construí mi protocolo sobre: '+S[sel].titulo+' con '+aciertos+'/'+S[sel].pasos.length+' aciertos. ¿Tú ya lo intentaste? 👉 https://maravilla9.github.io/metodologia';
+  if(tipo==='wa')window.open('https://wa.me/?text='+encodeURIComponent(txt));
+  else if(tipo==='fb')window.open('https://www.facebook.com/sharer/sharer.php?u=https://maravilla9.github.io/metodologia&quote='+encodeURIComponent(txt));
+  else if(tipo==='cp'){navigator.clipboard.writeText(txt).then(function(){alert('¡Enlace copiado!')});}
+}
+ 
+function reiniciar(){
+  sel=-1;paso=0;respOpt=-1;respVerb='';aciertos=0;
+  document.getElementById('fase-resultado').classList.add('hidden');
+  document.getElementById('fase-escenario').classList.remove('hidden');
+  document.getElementById('desc-box').classList.remove('visible');
+  document.getElementById('btn-ini').classList.add('hidden');
+  document.querySelectorAll('.sc-card').forEach(function(c){c.classList.remove('active')});
+}
+</script>
+</body>
+</html>
