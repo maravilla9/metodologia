@@ -47,7 +47,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gris);color:var(--text);m
 .prog-line.done{background:var(--azul)}
 .opts{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem}
 .opt{border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:13px;color:var(--text);background:#fff;text-align:left;line-height:1.5;transition:all 0.15s;font-family:'DM Sans',sans-serif}
-.opt:hover{border-color:var(--azul2);background:var(--azul-claro)}
+.opt:hover{border-color:#E8A838;background:#FEF6EC}
 .opt.sel{border-color:var(--azul);background:var(--azul-claro);color:var(--azul)}
 .opt.ok{border-color:var(--verde);background:var(--verde-claro);color:var(--verde)}
 .opt.bad{border-color:var(--rojo);background:var(--rojo-claro);color:var(--rojo)}
@@ -282,11 +282,12 @@ function verificar(){
   if(p.tipo==='opt'){
     if(respOpt===-1){fb.className='fb bad';fb.textContent='Selecciona una opción para continuar.';return;}
     correcto=respOpt===p.ok;
-    document.querySelectorAll('.opt').forEach(function(o,i){
-      o.classList.remove('sel');
-      if(i===p.ok)o.classList.add('ok');
-      else if(i===respOpt&&!correcto)o.classList.add('bad');
-    });
+    if(!correcto){
+      document.querySelectorAll('.opt').forEach(function(o,i){
+        o.classList.remove('sel');
+        if(i===respOpt)o.classList.add('bad');
+      });
+    }
   } else {
     if(!respVerb){fb.className='fb bad';fb.textContent='Selecciona un verbo para continuar.';return;}
     correcto=respVerb===p.ok;
